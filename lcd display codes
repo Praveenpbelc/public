@@ -1,3 +1,5 @@
+//Move data from right to left
+
 int i;
 int rs=11,en=10;
 int lcd_data_pins[8]={2,3,4,5,6,7,8,9};
@@ -57,6 +59,73 @@ void setup() {
   }
   delay(500);
  
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+}
+
+//print data at the center of the display 
+
+int i;
+int rs=11,en=10;
+int lcd_data_pins[8]={2,3,4,5,6,7,8,9};
+void lcd_enable()
+{
+  digitalWrite(en, HIGH);
+  delayMicroseconds(100);
+  digitalWrite(en,LOW);
+  delay(10);
+}
+void lcd_command(byte cmd)
+{
+  digitalWrite(rs,LOW);
+  for(i=0;i<8;i++){
+    digitalWrite(lcd_data_pins[i],(cmd>>i)&0x01);
+  }
+  lcd_enable();
+
+}
+void lcd_data(byte data)
+{
+  digitalWrite(rs, HIGH);
+  for(i=0;i<8;i++){
+    digitalWrite(lcd_data_pins[i],(data>>i)&0x01);
+  }
+  lcd_enable();
+}
+void setup() {
+  // put your setup code here, to run once
+  pinMode(rs, OUTPUT);
+  pinMode(en, OUTPUT);
+  for(i=0;i<8;i++){
+    pinMode(lcd_data_pins[i], OUTPUT);
+  }
+  digitalWrite(en,LOW);
+  lcd_command(0x01);
+  lcd_command(0x38);
+  lcd_command(0x0E);
+  lcd_command(0x06);
+  lcd_command(0x82);
+  lcd_data('E');
+  lcd_data('L');
+  lcd_data('E');
+  lcd_data('C');
+  lcd_data('T');
+  lcd_data('R');
+  lcd_data('O');
+  lcd_data('N');
+  lcd_data('I');
+  lcd_data('C');
+  lcd_data('S');
+
+  lcd_command(0xc6);
+  lcd_data('S');
+  lcd_data('J');
+  lcd_data('C');
+  
+
 }
 
 void loop() {
