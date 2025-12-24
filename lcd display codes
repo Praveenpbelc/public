@@ -1,0 +1,65 @@
+int i;
+int rs=11,en=10;
+int lcd_data_pins[8]={2,3,4,5,6,7,8,9};
+void lcd_enable()
+{
+  digitalWrite(en, HIGH);
+  delayMicroseconds(100);
+  digitalWrite(en,LOW);
+  delay(10);
+}
+void lcd_command(byte cmd)
+{
+  digitalWrite(rs,LOW);
+  for(i=0;i<8;i++){
+    digitalWrite(lcd_data_pins[i],(cmd>>i)&0x01);
+  }
+  lcd_enable();
+
+}
+void lcd_data(byte data)
+{
+  digitalWrite(rs, HIGH);
+  for(i=0;i<8;i++){
+    digitalWrite(lcd_data_pins[i],(data>>i)&0x01);
+  }
+  lcd_enable();
+}
+
+void setup() {
+  // put your setup code here, to run once
+  pinMode(rs, OUTPUT);
+  pinMode(en, OUTPUT);
+  for(i=0;i<8;i++){
+    pinMode(lcd_data_pins[i], OUTPUT);
+  }
+  digitalWrite(en,LOW);
+  lcd_command(0x01);
+  lcd_command(0x38);
+  lcd_command(0x06);
+
+  
+  while(true){
+    lcd_command(0x80);
+    lcd_command(0x0E);
+    lcd_command(0x1C);
+    lcd_data('E');
+    lcd_data('l');
+    lcd_data('e');
+    lcd_data('c');
+    lcd_data('t');
+    lcd_data('r');
+    lcd_data('o');
+    lcd_data('n');
+    lcd_data('i');
+    lcd_data('c');
+    lcd_data('s');
+  }
+  delay(500);
+ 
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+}
