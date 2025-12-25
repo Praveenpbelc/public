@@ -132,3 +132,68 @@ void loop() {
   // put your main code here, to run repeatedly:
 
 }
+
+
+// To display the data as string 
+
+int i;
+int rs=11,en=10;
+int lcd_data_pins[8]={2,3,4,5,6,7,8,9};
+void lcd_enable()
+{
+  digitalWrite(en, HIGH);
+  delayMicroseconds(100);
+  digitalWrite(en,LOW);
+  delay(10);
+}
+void lcd_command(byte cmd)
+{
+  digitalWrite(rs,LOW);
+  for(i=0;i<8;i++){
+    digitalWrite(lcd_data_pins[i],(cmd>>i)&0x01);
+  }
+  lcd_enable();
+
+}
+void lcd_data(byte data)
+{
+  digitalWrite(rs,HIGH);
+  for(i=0;i<8;i++){
+    digitalWrite(lcd_data_pins[i],(data>>i)&0x01);
+  }
+  lcd_enable();
+
+}
+void lcd_content(const char *content)
+{
+  while(*content !='\0'){
+    lcd_data(*content);
+    content++;
+  }
+}
+
+void setup() {
+  // put your setup code here, to run once
+  pinMode(rs, OUTPUT);
+  pinMode(en, OUTPUT);
+  for(i=0;i<8;i++){
+    pinMode(lcd_data_pins[i], OUTPUT);
+  }
+  digitalWrite(en,LOW);
+  lcd_command(0x01);
+  lcd_command(0x38);
+  lcd_command(0x06);
+  while(true)
+  {
+  lcd_command(0x0E);
+  lcd_command(0x80);
+  lcd_command(0x1C);
+  lcd_content("praveen  kumar ");
+}
+delay(500);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+}
